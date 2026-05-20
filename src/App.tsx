@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Quote, RefreshCw, Share2, Copy, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { copyToClipboard, getRandomQuote } from "./utils/funtions";
-import type { CitationType } from "./@types/citation";
+import type { CitationType } from "./@types/typescript";
 
 const App: React.FC = () => {
   const [citations, setCitations] = useState<CitationType[]>([]);
