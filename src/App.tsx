@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Quote, RefreshCw, Share2, Copy, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-type Citation = {
+type CitationType = {
   text: string;
   author: string;
 };
 
 const App: React.FC = () => {
-  const [citations, setCitations] = useState<Citation[]>([]);
-  const [currentQuote, setCurrentQuote] = useState<Citation | null>(null);
+  const [citations, setCitations] = useState<CitationType[]>([]);
+  const [currentQuote, setCurrentQuote] = useState<CitationType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [rotation, setRotation] = useState(0);
   const [copied, setCopied] = useState(false);
@@ -17,7 +17,7 @@ const App: React.FC = () => {
   useEffect(() => {
     fetch("/citations.json")
       .then((res) => res.json())
-      .then((data: Citation[]) => {
+      .then((data: CitationType[]) => {
         setCitations(data);
         setCurrentQuote(data[Math.floor(Math.random() * data.length)]);
         setLoading(false);
