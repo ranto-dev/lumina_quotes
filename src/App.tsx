@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Quote, RefreshCw, Share2, Copy, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-
-type CitationType = {
-  text: string;
-  author: string;
-};
+import { copyToClipboard, getRandomQuote } from "./utils/funtions";
+import type { CitationType } from "./@types/citation";
 
 const App: React.FC = () => {
   const [citations, setCitations] = useState<CitationType[]>([]);
@@ -24,24 +21,6 @@ const App: React.FC = () => {
       })
       .catch((err) => console.error("Erreur de chargement :", err));
   }, []);
-
-  const getRandomQuote = () => {
-    if (citations.length > 0) {
-      setRotation((prev) => prev + 180);
-      const randomIndex = Math.floor(Math.random() * citations.length);
-      setCurrentQuote(citations[randomIndex]);
-    }
-  };
-
-  const copyToClipboard = () => {
-    if (currentQuote) {
-      navigator.clipboard.writeText(
-        `"${currentQuote.text}" - ${currentQuote.author}`,
-      );
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
 
   if (loading)
     return (
@@ -86,7 +65,7 @@ const App: React.FC = () => {
           <div className="mt-12 flex flex-wrap items-center justify-between gap-6">
             <div className="flex gap-3">
               <button
-                onClick={copyToClipboard}
+                onClick={() => copyToClipboard(currentQuote, setCopied)}
                 className="p-4 rounded-2xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all border border-white/5"
               >
                 {copied ? (
@@ -100,7 +79,9 @@ const App: React.FC = () => {
               </button>
             </div>
             <button
-              onClick={getRandomQuote}
+              onClick={() =>
+                getRandomQuote(citations, setRotation, setCurrentQuote)
+              }
               className="group relative flex items-center gap-3 bg-white text-black px-8 py-4 rounded-2xl font-bold transition-all hover:scale-105 active:scale-95 overflow-hidden"
             >
               <motion.div
